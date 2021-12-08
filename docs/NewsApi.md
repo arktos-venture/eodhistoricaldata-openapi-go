@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 ## ListNews
 
-> []Quote ListNews(ctx).S(s).From(from).To(to).Limit(limit).Offset(offset).Execute()
+> []New ListNews(ctx).S(s).From(from).To(to).Limit(limit).Offset(offset).Execute()
 
 
 
@@ -42,7 +42,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `NewsApi.ListNews``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ListNews`: []Quote
+    // response from `ListNews`: []New
     fmt.Fprintf(os.Stdout, "Response from `NewsApi.ListNews`: %v\n", resp)
 }
 ```
@@ -66,7 +66,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**[]Quote**](Quote.md)
+[**[]New**](New.md)
 
 ### Authorization
 

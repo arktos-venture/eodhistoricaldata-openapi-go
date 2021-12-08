@@ -66,7 +66,7 @@ func (r ApiListNewsRequest) Offset(offset string) ApiListNewsRequest {
 	return r
 }
 
-func (r ApiListNewsRequest) Execute() ([]Quote, *_nethttp.Response, error) {
+func (r ApiListNewsRequest) Execute() ([]New, *_nethttp.Response, error) {
 	return r.ApiService.ListNewsExecute(r)
 }
 
@@ -86,15 +86,15 @@ func (a *NewsApiService) ListNews(ctx _context.Context) ApiListNewsRequest {
 }
 
 // Execute executes the request
-//  @return []Quote
-func (a *NewsApiService) ListNewsExecute(r ApiListNewsRequest) ([]Quote, *_nethttp.Response, error) {
+//  @return []New
+func (a *NewsApiService) ListNewsExecute(r ApiListNewsRequest) ([]New, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  []Quote
+		localVarReturnValue  []New
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NewsApiService.ListNews")
