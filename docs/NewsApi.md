@@ -32,8 +32,8 @@ func main() {
     s := "["AAPL.US"]" // string | string s (name or id) of the news
     from := "["2021-03-01"]" // string | string from (name or id) of the news
     to := "["2021-03-10"]" // string | string to (name or id) of the news
-    limit := "[1000]" // string | string limit (name or id) of the news
-    offset := "[200]" // string | string offset (name or id) of the news
+    limit := "[1000]" // string | string limit (name or id) of the news (optional)
+    offset := "[200]" // string | string offset (name or id) of the news (optional)
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)

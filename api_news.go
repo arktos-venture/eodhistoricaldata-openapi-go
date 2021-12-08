@@ -116,18 +116,16 @@ func (a *NewsApiService) ListNewsExecute(r ApiListNewsRequest) ([]New, *_nethttp
 	if r.to == nil {
 		return localVarReturnValue, nil, reportError("to is required and must be specified")
 	}
-	if r.limit == nil {
-		return localVarReturnValue, nil, reportError("limit is required and must be specified")
-	}
-	if r.offset == nil {
-		return localVarReturnValue, nil, reportError("offset is required and must be specified")
-	}
 
 	localVarQueryParams.Add("s", parameterToString(*r.s, ""))
 	localVarQueryParams.Add("from", parameterToString(*r.from, ""))
 	localVarQueryParams.Add("to", parameterToString(*r.to, ""))
-	localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
-	localVarQueryParams.Add("offset", parameterToString(*r.offset, ""))
+	if r.limit != nil {
+		localVarQueryParams.Add("limit", parameterToString(*r.limit, ""))
+	}
+	if r.offset != nil {
+		localVarQueryParams.Add("offset", parameterToString(*r.offset, ""))
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
