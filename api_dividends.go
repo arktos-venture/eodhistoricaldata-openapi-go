@@ -12,23 +12,23 @@ package openapi
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"strings"
 )
 
 // Linger please
 var (
-	_ _context.Context
+	_ context.Context
 )
 
 // DividendsApiService DividendsApi service
 type DividendsApiService service
 
 type ApiListDividendsRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *DividendsApiService
 	ticker     string
 	fmt        *string
@@ -54,7 +54,7 @@ func (r ApiListDividendsRequest) To(to string) ApiListDividendsRequest {
 	return r
 }
 
-func (r ApiListDividendsRequest) Execute() ([]Dividend, *_nethttp.Response, error) {
+func (r ApiListDividendsRequest) Execute() ([]Dividend, *http.Response, error) {
 	return r.ApiService.ListDividendsExecute(r)
 }
 
@@ -63,11 +63,11 @@ ListDividends Method for ListDividends
 
 List properties of dividends
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ticker string ticker (name or id) of the dividends
  @return ApiListDividendsRequest
 */
-func (a *DividendsApiService) ListDividends(ctx _context.Context, ticker string) ApiListDividendsRequest {
+func (a *DividendsApiService) ListDividends(ctx context.Context, ticker string) ApiListDividendsRequest {
 	return ApiListDividendsRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -77,27 +77,25 @@ func (a *DividendsApiService) ListDividends(ctx _context.Context, ticker string)
 
 // Execute executes the request
 //  @return []Dividend
-func (a *DividendsApiService) ListDividendsExecute(r ApiListDividendsRequest) ([]Dividend, *_nethttp.Response, error) {
+func (a *DividendsApiService) ListDividendsExecute(r ApiListDividendsRequest) ([]Dividend, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []Dividend
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Dividend
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DividendsApiService.ListDividends")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/div/{ticker}"
-	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", _neturl.PathEscape(parameterToString(r.ticker, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", url.PathEscape(parameterToString(r.ticker, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -142,7 +140,7 @@ func (a *DividendsApiService) ListDividendsExecute(r ApiListDividendsRequest) ([
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -152,15 +150,15 @@ func (a *DividendsApiService) ListDividendsExecute(r ApiListDividendsRequest) ([
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -169,7 +167,7 @@ func (a *DividendsApiService) ListDividendsExecute(r ApiListDividendsRequest) ([
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}

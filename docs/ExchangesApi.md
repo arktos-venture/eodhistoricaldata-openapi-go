@@ -37,8 +37,8 @@ func main() {
     to := "["2021-03-10"]" // string | string to (name or id) of the exchangedetails (optional)
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.ExchangesApi.ListExchangeDetails(context.Background(), exchange).Fmt(fmt).From(from).To(to).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.ExchangesApi.ListExchangeDetails(context.Background(), exchange).Fmt(fmt).From(from).To(to).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ExchangesApi.ListExchangeDetails``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -111,8 +111,8 @@ func main() {
     fmt := "["json","csv"]" // string | string fmt (name or id) of the exchangetickers
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.ExchangesApi.ListExchangeTickers(context.Background(), exchange).Fmt(fmt).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.ExchangesApi.ListExchangeTickers(context.Background(), exchange).Fmt(fmt).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ExchangesApi.ListExchangeTickers``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -182,8 +182,8 @@ func main() {
     fmt := "["json","csv"]" // string | string fmt (name or id) of the exchanges
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.ExchangesApi.ListExchanges(context.Background()).Fmt(fmt).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.ExchangesApi.ListExchanges(context.Background()).Fmt(fmt).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `ExchangesApi.ListExchanges``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

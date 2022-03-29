@@ -12,22 +12,22 @@ package openapi
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 )
 
 // Linger please
 var (
-	_ _context.Context
+	_ context.Context
 )
 
 // NewsApiService NewsApi service
 type NewsApiService service
 
 type ApiListNewsRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *NewsApiService
 	s          *string
 	from       *string
@@ -66,7 +66,7 @@ func (r ApiListNewsRequest) Offset(offset string) ApiListNewsRequest {
 	return r
 }
 
-func (r ApiListNewsRequest) Execute() ([]New, *_nethttp.Response, error) {
+func (r ApiListNewsRequest) Execute() ([]New, *http.Response, error) {
 	return r.ApiService.ListNewsExecute(r)
 }
 
@@ -75,10 +75,10 @@ ListNews Method for ListNews
 
 List properties of news
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListNewsRequest
 */
-func (a *NewsApiService) ListNews(ctx _context.Context) ApiListNewsRequest {
+func (a *NewsApiService) ListNews(ctx context.Context) ApiListNewsRequest {
 	return ApiListNewsRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -87,26 +87,24 @@ func (a *NewsApiService) ListNews(ctx _context.Context) ApiListNewsRequest {
 
 // Execute executes the request
 //  @return []New
-func (a *NewsApiService) ListNewsExecute(r ApiListNewsRequest) ([]New, *_nethttp.Response, error) {
+func (a *NewsApiService) ListNewsExecute(r ApiListNewsRequest) ([]New, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []New
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []New
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "NewsApiService.ListNews")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/news"
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.s == nil {
 		return localVarReturnValue, nil, reportError("s is required and must be specified")
 	}
@@ -157,7 +155,7 @@ func (a *NewsApiService) ListNewsExecute(r ApiListNewsRequest) ([]New, *_nethttp
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -167,15 +165,15 @@ func (a *NewsApiService) ListNewsExecute(r ApiListNewsRequest) ([]New, *_nethttp
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -184,7 +182,7 @@ func (a *NewsApiService) ListNewsExecute(r ApiListNewsRequest) ([]New, *_nethttp
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}

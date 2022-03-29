@@ -35,8 +35,8 @@ func main() {
     to := "["2021-03-10"]" // string | string to (name or id) of the dividends
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.DividendsApi.ListDividends(context.Background(), ticker).Fmt(fmt).From(from).To(to).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.DividendsApi.ListDividends(context.Background(), ticker).Fmt(fmt).From(from).To(to).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `DividendsApi.ListDividends``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

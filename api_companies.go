@@ -12,23 +12,23 @@ package openapi
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"strings"
 )
 
 // Linger please
 var (
-	_ _context.Context
+	_ context.Context
 )
 
 // CompaniesApiService CompaniesApi service
 type CompaniesApiService service
 
 type ApiListBulkFundamentalsRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *CompaniesApiService
 	exchange   string
 	fmt        *string
@@ -61,7 +61,7 @@ func (r ApiListBulkFundamentalsRequest) Limit(limit string) ApiListBulkFundament
 	return r
 }
 
-func (r ApiListBulkFundamentalsRequest) Execute() ([]Fundamentals, *_nethttp.Response, error) {
+func (r ApiListBulkFundamentalsRequest) Execute() ([]Fundamentals, *http.Response, error) {
 	return r.ApiService.ListBulkFundamentalsExecute(r)
 }
 
@@ -70,11 +70,11 @@ ListBulkFundamentals Method for ListBulkFundamentals
 
 List properties of bulk-fundamentals
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param exchange string exchange (name or id) of the bulk-fundamentals
  @return ApiListBulkFundamentalsRequest
 */
-func (a *CompaniesApiService) ListBulkFundamentals(ctx _context.Context, exchange string) ApiListBulkFundamentalsRequest {
+func (a *CompaniesApiService) ListBulkFundamentals(ctx context.Context, exchange string) ApiListBulkFundamentalsRequest {
 	return ApiListBulkFundamentalsRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -84,27 +84,25 @@ func (a *CompaniesApiService) ListBulkFundamentals(ctx _context.Context, exchang
 
 // Execute executes the request
 //  @return []Fundamentals
-func (a *CompaniesApiService) ListBulkFundamentalsExecute(r ApiListBulkFundamentalsRequest) ([]Fundamentals, *_nethttp.Response, error) {
+func (a *CompaniesApiService) ListBulkFundamentalsExecute(r ApiListBulkFundamentalsRequest) ([]Fundamentals, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []Fundamentals
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Fundamentals
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompaniesApiService.ListBulkFundamentals")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/bulk-fundamentals/{exchange}"
-	localVarPath = strings.Replace(localVarPath, "{"+"exchange"+"}", _neturl.PathEscape(parameterToString(r.exchange, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"exchange"+"}", url.PathEscape(parameterToString(r.exchange, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -151,7 +149,7 @@ func (a *CompaniesApiService) ListBulkFundamentalsExecute(r ApiListBulkFundament
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -161,15 +159,15 @@ func (a *CompaniesApiService) ListBulkFundamentalsExecute(r ApiListBulkFundament
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -178,7 +176,7 @@ func (a *CompaniesApiService) ListBulkFundamentalsExecute(r ApiListBulkFundament
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -189,7 +187,7 @@ func (a *CompaniesApiService) ListBulkFundamentalsExecute(r ApiListBulkFundament
 }
 
 type ApiReadFundamentalsRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *CompaniesApiService
 	ticker     string
 	filter     *string
@@ -201,7 +199,7 @@ func (r ApiReadFundamentalsRequest) Filter(filter string) ApiReadFundamentalsReq
 	return r
 }
 
-func (r ApiReadFundamentalsRequest) Execute() (Fundamentals, *_nethttp.Response, error) {
+func (r ApiReadFundamentalsRequest) Execute() (*Fundamentals, *http.Response, error) {
 	return r.ApiService.ReadFundamentalsExecute(r)
 }
 
@@ -210,11 +208,11 @@ ReadFundamentals Method for ReadFundamentals
 
 Read properties of fundamentals
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ticker string ticker (name or id) of the fundamentals
  @return ApiReadFundamentalsRequest
 */
-func (a *CompaniesApiService) ReadFundamentals(ctx _context.Context, ticker string) ApiReadFundamentalsRequest {
+func (a *CompaniesApiService) ReadFundamentals(ctx context.Context, ticker string) ApiReadFundamentalsRequest {
 	return ApiReadFundamentalsRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -224,27 +222,25 @@ func (a *CompaniesApiService) ReadFundamentals(ctx _context.Context, ticker stri
 
 // Execute executes the request
 //  @return Fundamentals
-func (a *CompaniesApiService) ReadFundamentalsExecute(r ApiReadFundamentalsRequest) (Fundamentals, *_nethttp.Response, error) {
+func (a *CompaniesApiService) ReadFundamentalsExecute(r ApiReadFundamentalsRequest) (*Fundamentals, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  Fundamentals
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Fundamentals
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CompaniesApiService.ReadFundamentals")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/fundamentals/{ticker}"
-	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", _neturl.PathEscape(parameterToString(r.ticker, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", url.PathEscape(parameterToString(r.ticker, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	if r.filter != nil {
 		localVarQueryParams.Add("filter", parameterToString(*r.filter, ""))
@@ -280,7 +276,7 @@ func (a *CompaniesApiService) ReadFundamentalsExecute(r ApiReadFundamentalsReque
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -290,15 +286,15 @@ func (a *CompaniesApiService) ReadFundamentalsExecute(r ApiReadFundamentalsReque
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -307,7 +303,7 @@ func (a *CompaniesApiService) ReadFundamentalsExecute(r ApiReadFundamentalsReque
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}

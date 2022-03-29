@@ -12,23 +12,23 @@ package openapi
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"strings"
 )
 
 // Linger please
 var (
-	_ _context.Context
+	_ context.Context
 )
 
 // BondsApiService BondsApi service
 type BondsApiService service
 
 type ApiReadBondFundamentalsRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *BondsApiService
 	bond       string
 	fmt        *string
@@ -40,7 +40,7 @@ func (r ApiReadBondFundamentalsRequest) Fmt(fmt string) ApiReadBondFundamentalsR
 	return r
 }
 
-func (r ApiReadBondFundamentalsRequest) Execute() (BondFundamentals, *_nethttp.Response, error) {
+func (r ApiReadBondFundamentalsRequest) Execute() (*BondFundamentals, *http.Response, error) {
 	return r.ApiService.ReadBondFundamentalsExecute(r)
 }
 
@@ -49,11 +49,11 @@ ReadBondFundamentals Method for ReadBondFundamentals
 
 Read properties of bondfundamentals
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param bond string bond (name or id) of the bondfundamentals
  @return ApiReadBondFundamentalsRequest
 */
-func (a *BondsApiService) ReadBondFundamentals(ctx _context.Context, bond string) ApiReadBondFundamentalsRequest {
+func (a *BondsApiService) ReadBondFundamentals(ctx context.Context, bond string) ApiReadBondFundamentalsRequest {
 	return ApiReadBondFundamentalsRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -63,27 +63,25 @@ func (a *BondsApiService) ReadBondFundamentals(ctx _context.Context, bond string
 
 // Execute executes the request
 //  @return BondFundamentals
-func (a *BondsApiService) ReadBondFundamentalsExecute(r ApiReadBondFundamentalsRequest) (BondFundamentals, *_nethttp.Response, error) {
+func (a *BondsApiService) ReadBondFundamentalsExecute(r ApiReadBondFundamentalsRequest) (*BondFundamentals, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  BondFundamentals
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *BondFundamentals
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "BondsApiService.ReadBondFundamentals")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/bond-fundamentals/{bond}"
-	localVarPath = strings.Replace(localVarPath, "{"+"bond"+"}", _neturl.PathEscape(parameterToString(r.bond, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"bond"+"}", url.PathEscape(parameterToString(r.bond, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -120,7 +118,7 @@ func (a *BondsApiService) ReadBondFundamentalsExecute(r ApiReadBondFundamentalsR
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -130,15 +128,15 @@ func (a *BondsApiService) ReadBondFundamentalsExecute(r ApiReadBondFundamentalsR
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -147,7 +145,7 @@ func (a *BondsApiService) ReadBondFundamentalsExecute(r ApiReadBondFundamentalsR
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}

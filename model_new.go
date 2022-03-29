@@ -16,12 +16,12 @@ import (
 
 // New struct for New
 type New struct {
-	Date    *string   `json:"date,omitempty"`
-	Title   *string   `json:"title,omitempty"`
-	Content *string   `json:"content,omitempty"`
-	Link    *string   `json:"link,omitempty"`
-	Symbols *[]string `json:"symbols,omitempty"`
-	Tags    *[]string `json:"tags,omitempty"`
+	Date    *string  `json:"date,omitempty"`
+	Title   *string  `json:"title,omitempty"`
+	Content *string  `json:"content,omitempty"`
+	Link    *string  `json:"link,omitempty"`
+	Symbols []string `json:"symbols,omitempty"`
+	Tags    []string `json:"tags,omitempty"`
 }
 
 // NewNew instantiates a new New object
@@ -175,12 +175,12 @@ func (o *New) GetSymbols() []string {
 		var ret []string
 		return ret
 	}
-	return *o.Symbols
+	return o.Symbols
 }
 
 // GetSymbolsOk returns a tuple with the Symbols field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *New) GetSymbolsOk() (*[]string, bool) {
+func (o *New) GetSymbolsOk() ([]string, bool) {
 	if o == nil || o.Symbols == nil {
 		return nil, false
 	}
@@ -198,7 +198,7 @@ func (o *New) HasSymbols() bool {
 
 // SetSymbols gets a reference to the given []string and assigns it to the Symbols field.
 func (o *New) SetSymbols(v []string) {
-	o.Symbols = &v
+	o.Symbols = v
 }
 
 // GetTags returns the Tags field value if set, zero value otherwise.
@@ -207,12 +207,12 @@ func (o *New) GetTags() []string {
 		var ret []string
 		return ret
 	}
-	return *o.Tags
+	return o.Tags
 }
 
 // GetTagsOk returns a tuple with the Tags field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *New) GetTagsOk() (*[]string, bool) {
+func (o *New) GetTagsOk() ([]string, bool) {
 	if o == nil || o.Tags == nil {
 		return nil, false
 	}
@@ -230,7 +230,7 @@ func (o *New) HasTags() bool {
 
 // SetTags gets a reference to the given []string and assigns it to the Tags field.
 func (o *New) SetTags(v []string) {
-	o.Tags = &v
+	o.Tags = v
 }
 
 func (o New) MarshalJSON() ([]byte, error) {

@@ -34,8 +34,8 @@ func main() {
     indicator := "["population_total"]" // string | string indicator (name or id) of the macroindicator
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.MacroIndicatorApi.ListMacroIndicator(context.Background(), country).Fmt(fmt).Indicator(indicator).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.MacroIndicatorApi.ListMacroIndicator(context.Background(), country).Fmt(fmt).Indicator(indicator).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `MacroIndicatorApi.ListMacroIndicator``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

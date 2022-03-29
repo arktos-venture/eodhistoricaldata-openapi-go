@@ -18,7 +18,7 @@ import (
 type Fundamentals struct {
 	General                    *FundamentalsGeneral                            `json:"General,omitempty"`
 	Components                 *FundamentalsComponents                         `json:"Components,omitempty"`
-	HistoricalTickerComponents *[]FundamentalsHistoricalTickerComponentsData   `json:"HistoricalTickerComponents,omitempty"`
+	HistoricalTickerComponents []FundamentalsHistoricalTickerComponentsData    `json:"HistoricalTickerComponents,omitempty"`
 	Highlights                 *FundamentalsHighlights                         `json:"Highlights,omitempty"`
 	Valuation                  *FundamentalsValuation                          `json:"Valuation,omitempty"`
 	SharesStats                *FundamentalsSharesStats                        `json:"SharesStats,omitempty"`
@@ -120,12 +120,12 @@ func (o *Fundamentals) GetHistoricalTickerComponents() []FundamentalsHistoricalT
 		var ret []FundamentalsHistoricalTickerComponentsData
 		return ret
 	}
-	return *o.HistoricalTickerComponents
+	return o.HistoricalTickerComponents
 }
 
 // GetHistoricalTickerComponentsOk returns a tuple with the HistoricalTickerComponents field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Fundamentals) GetHistoricalTickerComponentsOk() (*[]FundamentalsHistoricalTickerComponentsData, bool) {
+func (o *Fundamentals) GetHistoricalTickerComponentsOk() ([]FundamentalsHistoricalTickerComponentsData, bool) {
 	if o == nil || o.HistoricalTickerComponents == nil {
 		return nil, false
 	}
@@ -143,7 +143,7 @@ func (o *Fundamentals) HasHistoricalTickerComponents() bool {
 
 // SetHistoricalTickerComponents gets a reference to the given []FundamentalsHistoricalTickerComponentsData and assigns it to the HistoricalTickerComponents field.
 func (o *Fundamentals) SetHistoricalTickerComponents(v []FundamentalsHistoricalTickerComponentsData) {
-	o.HistoricalTickerComponents = &v
+	o.HistoricalTickerComponents = v
 }
 
 // GetHighlights returns the Highlights field value if set, zero value otherwise.

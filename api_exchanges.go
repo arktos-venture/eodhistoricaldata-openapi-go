@@ -12,23 +12,23 @@ package openapi
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"strings"
 )
 
 // Linger please
 var (
-	_ _context.Context
+	_ context.Context
 )
 
 // ExchangesApiService ExchangesApi service
 type ExchangesApiService service
 
 type ApiListExchangeDetailsRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *ExchangesApiService
 	exchange   string
 	fmt        *string
@@ -54,7 +54,7 @@ func (r ApiListExchangeDetailsRequest) To(to string) ApiListExchangeDetailsReque
 	return r
 }
 
-func (r ApiListExchangeDetailsRequest) Execute() (ExchangeDetails, *_nethttp.Response, error) {
+func (r ApiListExchangeDetailsRequest) Execute() (*ExchangeDetails, *http.Response, error) {
 	return r.ApiService.ListExchangeDetailsExecute(r)
 }
 
@@ -63,11 +63,11 @@ ListExchangeDetails Method for ListExchangeDetails
 
 List properties of exchangedetails
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param exchange string exchange (name or id) of the exchangedetails
  @return ApiListExchangeDetailsRequest
 */
-func (a *ExchangesApiService) ListExchangeDetails(ctx _context.Context, exchange string) ApiListExchangeDetailsRequest {
+func (a *ExchangesApiService) ListExchangeDetails(ctx context.Context, exchange string) ApiListExchangeDetailsRequest {
 	return ApiListExchangeDetailsRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -77,27 +77,25 @@ func (a *ExchangesApiService) ListExchangeDetails(ctx _context.Context, exchange
 
 // Execute executes the request
 //  @return ExchangeDetails
-func (a *ExchangesApiService) ListExchangeDetailsExecute(r ApiListExchangeDetailsRequest) (ExchangeDetails, *_nethttp.Response, error) {
+func (a *ExchangesApiService) ListExchangeDetailsExecute(r ApiListExchangeDetailsRequest) (*ExchangeDetails, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  ExchangeDetails
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *ExchangeDetails
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExchangesApiService.ListExchangeDetails")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/exchange-details/{exchange}"
-	localVarPath = strings.Replace(localVarPath, "{"+"exchange"+"}", _neturl.PathEscape(parameterToString(r.exchange, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"exchange"+"}", url.PathEscape(parameterToString(r.exchange, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	if r.fmt != nil {
 		localVarQueryParams.Add("fmt", parameterToString(*r.fmt, ""))
@@ -139,7 +137,7 @@ func (a *ExchangesApiService) ListExchangeDetailsExecute(r ApiListExchangeDetail
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -149,15 +147,15 @@ func (a *ExchangesApiService) ListExchangeDetailsExecute(r ApiListExchangeDetail
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -166,7 +164,7 @@ func (a *ExchangesApiService) ListExchangeDetailsExecute(r ApiListExchangeDetail
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -177,7 +175,7 @@ func (a *ExchangesApiService) ListExchangeDetailsExecute(r ApiListExchangeDetail
 }
 
 type ApiListExchangeTickersRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *ExchangesApiService
 	exchange   string
 	fmt        *string
@@ -189,7 +187,7 @@ func (r ApiListExchangeTickersRequest) Fmt(fmt string) ApiListExchangeTickersReq
 	return r
 }
 
-func (r ApiListExchangeTickersRequest) Execute() ([]ExchangeTicker, *_nethttp.Response, error) {
+func (r ApiListExchangeTickersRequest) Execute() ([]ExchangeTicker, *http.Response, error) {
 	return r.ApiService.ListExchangeTickersExecute(r)
 }
 
@@ -198,11 +196,11 @@ ListExchangeTickers Method for ListExchangeTickers
 
 List properties of exchangetickers
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param exchange string exchange (name or id) of the exchangetickers
  @return ApiListExchangeTickersRequest
 */
-func (a *ExchangesApiService) ListExchangeTickers(ctx _context.Context, exchange string) ApiListExchangeTickersRequest {
+func (a *ExchangesApiService) ListExchangeTickers(ctx context.Context, exchange string) ApiListExchangeTickersRequest {
 	return ApiListExchangeTickersRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -212,27 +210,25 @@ func (a *ExchangesApiService) ListExchangeTickers(ctx _context.Context, exchange
 
 // Execute executes the request
 //  @return []ExchangeTicker
-func (a *ExchangesApiService) ListExchangeTickersExecute(r ApiListExchangeTickersRequest) ([]ExchangeTicker, *_nethttp.Response, error) {
+func (a *ExchangesApiService) ListExchangeTickersExecute(r ApiListExchangeTickersRequest) ([]ExchangeTicker, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []ExchangeTicker
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []ExchangeTicker
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExchangesApiService.ListExchangeTickers")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/exchange-symbol-list/{exchange}"
-	localVarPath = strings.Replace(localVarPath, "{"+"exchange"+"}", _neturl.PathEscape(parameterToString(r.exchange, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"exchange"+"}", url.PathEscape(parameterToString(r.exchange, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -269,7 +265,7 @@ func (a *ExchangesApiService) ListExchangeTickersExecute(r ApiListExchangeTicker
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -279,15 +275,15 @@ func (a *ExchangesApiService) ListExchangeTickersExecute(r ApiListExchangeTicker
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -296,7 +292,7 @@ func (a *ExchangesApiService) ListExchangeTickersExecute(r ApiListExchangeTicker
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -307,7 +303,7 @@ func (a *ExchangesApiService) ListExchangeTickersExecute(r ApiListExchangeTicker
 }
 
 type ApiListExchangesRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *ExchangesApiService
 	fmt        *string
 }
@@ -318,7 +314,7 @@ func (r ApiListExchangesRequest) Fmt(fmt string) ApiListExchangesRequest {
 	return r
 }
 
-func (r ApiListExchangesRequest) Execute() ([]Exchange, *_nethttp.Response, error) {
+func (r ApiListExchangesRequest) Execute() ([]Exchange, *http.Response, error) {
 	return r.ApiService.ListExchangesExecute(r)
 }
 
@@ -327,10 +323,10 @@ ListExchanges Method for ListExchanges
 
 List properties of exchanges
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiListExchangesRequest
 */
-func (a *ExchangesApiService) ListExchanges(ctx _context.Context) ApiListExchangesRequest {
+func (a *ExchangesApiService) ListExchanges(ctx context.Context) ApiListExchangesRequest {
 	return ApiListExchangesRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -339,26 +335,24 @@ func (a *ExchangesApiService) ListExchanges(ctx _context.Context) ApiListExchang
 
 // Execute executes the request
 //  @return []Exchange
-func (a *ExchangesApiService) ListExchangesExecute(r ApiListExchangesRequest) ([]Exchange, *_nethttp.Response, error) {
+func (a *ExchangesApiService) ListExchangesExecute(r ApiListExchangesRequest) ([]Exchange, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []Exchange
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Exchange
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ExchangesApiService.ListExchanges")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/exchanges-list"
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -395,7 +389,7 @@ func (a *ExchangesApiService) ListExchangesExecute(r ApiListExchangesRequest) ([
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -405,15 +399,15 @@ func (a *ExchangesApiService) ListExchangesExecute(r ApiListExchangesRequest) ([
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -422,7 +416,7 @@ func (a *ExchangesApiService) ListExchangesExecute(r ApiListExchangesRequest) ([
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}

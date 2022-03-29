@@ -4,12 +4,93 @@ All URIs are relative to *https://eodhistoricaldata.com/api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**ListEodBulkLastDay**](QuotesApi.md#ListEodBulkLastDay) | **Get** /eod-bulk-last-day/{exchange} | 
 [**ListHistoryIntradayQuotes**](QuotesApi.md#ListHistoryIntradayQuotes) | **Get** /intraday/{ticker} | 
 [**ListHistoryQuotes**](QuotesApi.md#ListHistoryQuotes) | **Get** /eod/{ticker} | 
 [**ListShortsQuotes**](QuotesApi.md#ListShortsQuotes) | **Get** /shorts/{ticker} | 
 [**ListSplitsQuotes**](QuotesApi.md#ListSplitsQuotes) | **Get** /splits/{ticker} | 
 [**ReadRealtimeQuotes**](QuotesApi.md#ReadRealtimeQuotes) | **Get** /real-time/{ticker} | 
 
+
+
+## ListEodBulkLastDay
+
+> []EodBulkLastDayItem ListEodBulkLastDay(ctx, exchange).Fmt(fmt).Symbols(symbols).Type_(type_).Date(date).Filter(filter).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    exchange := "exchange_example" // string | string exchange (name or id) of the eodbulklastday
+    fmt := "["json","csv"]" // string | string fmt (name or id) of the eodbulklastday
+    symbols := "symbols_example" // string | string symbols (name or id) of the eodbulklastday (optional)
+    type_ := "type__example" // string | string type (name or id) of the eodbulklastday (optional)
+    date := "date_example" // string | string date (name or id) of the eodbulklastday (optional)
+    filter := "filter_example" // string | string filter (name or id) of the eodbulklastday (optional)
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.QuotesApi.ListEodBulkLastDay(context.Background(), exchange).Fmt(fmt).Symbols(symbols).Type_(type_).Date(date).Filter(filter).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `QuotesApi.ListEodBulkLastDay``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `ListEodBulkLastDay`: []EodBulkLastDayItem
+    fmt.Fprintf(os.Stdout, "Response from `QuotesApi.ListEodBulkLastDay`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**exchange** | **string** | string exchange (name or id) of the eodbulklastday | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListEodBulkLastDayRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **fmt** | **string** | string fmt (name or id) of the eodbulklastday | 
+ **symbols** | **string** | string symbols (name or id) of the eodbulklastday | 
+ **type_** | **string** | string type (name or id) of the eodbulklastday | 
+ **date** | **string** | string date (name or id) of the eodbulklastday | 
+ **filter** | **string** | string filter (name or id) of the eodbulklastday | 
+
+### Return type
+
+[**[]EodBulkLastDayItem**](EodBulkLastDayItem.md)
+
+### Authorization
+
+[ApiKeyAuth](../README.md#ApiKeyAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## ListHistoryIntradayQuotes
@@ -40,8 +121,8 @@ func main() {
     to := "[10000,40000]" // string | string to (name or id) of the historyintradayquotes
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.QuotesApi.ListHistoryIntradayQuotes(context.Background(), ticker).Fmt(fmt).Interval(interval).From(from).To(to).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.QuotesApi.ListHistoryIntradayQuotes(context.Background(), ticker).Fmt(fmt).Interval(interval).From(from).To(to).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `QuotesApi.ListHistoryIntradayQuotes``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -120,8 +201,8 @@ func main() {
     to := "["2021-03-10"]" // string | string to (name or id) of the historyquotes (optional)
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.QuotesApi.ListHistoryQuotes(context.Background(), ticker).Period(period).Fmt(fmt).Filter(filter).Order(order).From(from).To(to).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.QuotesApi.ListHistoryQuotes(context.Background(), ticker).Period(period).Fmt(fmt).Filter(filter).Order(order).From(from).To(to).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `QuotesApi.ListHistoryQuotes``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -197,8 +278,8 @@ func main() {
     fmt := "["json","csv"]" // string | string fmt (name or id) of the shortsquotes
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.QuotesApi.ListShortsQuotes(context.Background(), ticker).Fmt(fmt).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.QuotesApi.ListShortsQuotes(context.Background(), ticker).Fmt(fmt).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `QuotesApi.ListShortsQuotes``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -271,8 +352,8 @@ func main() {
     to := "["2021-03-10"]" // string | string to (name or id) of the splitsquotes
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.QuotesApi.ListSplitsQuotes(context.Background(), ticker).Fmt(fmt).From(from).To(to).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.QuotesApi.ListSplitsQuotes(context.Background(), ticker).Fmt(fmt).From(from).To(to).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `QuotesApi.ListSplitsQuotes``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -347,8 +428,8 @@ func main() {
     filter := "["close"]" // string | string filter (name or id) of the realtimequotes (optional)
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.QuotesApi.ReadRealtimeQuotes(context.Background(), ticker).Fmt(fmt).Interval(interval).Filter(filter).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.QuotesApi.ReadRealtimeQuotes(context.Background(), ticker).Fmt(fmt).Interval(interval).Filter(filter).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `QuotesApi.ReadRealtimeQuotes``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
