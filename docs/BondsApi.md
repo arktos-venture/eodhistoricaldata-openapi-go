@@ -33,8 +33,8 @@ func main() {
     fmt := "["json","csv"]" // string | string fmt (name or id) of the bondfundamentals
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.BondsApi.ReadBondFundamentals(context.Background(), bond).Fmt(fmt).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.BondsApi.ReadBondFundamentals(context.Background(), bond).Fmt(fmt).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `BondsApi.ReadBondFundamentals``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

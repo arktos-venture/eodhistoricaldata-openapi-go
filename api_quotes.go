@@ -12,23 +12,191 @@ package openapi
 
 import (
 	"bytes"
-	_context "context"
-	_ioutil "io/ioutil"
-	_nethttp "net/http"
-	_neturl "net/url"
+	"context"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"strings"
 )
 
 // Linger please
 var (
-	_ _context.Context
+	_ context.Context
 )
 
 // QuotesApiService QuotesApi service
 type QuotesApiService service
 
+type ApiListEodBulkLastDayRequest struct {
+	ctx        context.Context
+	ApiService *QuotesApiService
+	exchange   string
+	fmt        *string
+	symbols    *string
+	type_      *string
+	date       *string
+	filter     *string
+}
+
+// string fmt (name or id) of the eodbulklastday
+func (r ApiListEodBulkLastDayRequest) Fmt(fmt string) ApiListEodBulkLastDayRequest {
+	r.fmt = &fmt
+	return r
+}
+
+// string symbols (name or id) of the eodbulklastday
+func (r ApiListEodBulkLastDayRequest) Symbols(symbols string) ApiListEodBulkLastDayRequest {
+	r.symbols = &symbols
+	return r
+}
+
+// string type (name or id) of the eodbulklastday
+func (r ApiListEodBulkLastDayRequest) Type_(type_ string) ApiListEodBulkLastDayRequest {
+	r.type_ = &type_
+	return r
+}
+
+// string date (name or id) of the eodbulklastday
+func (r ApiListEodBulkLastDayRequest) Date(date string) ApiListEodBulkLastDayRequest {
+	r.date = &date
+	return r
+}
+
+// string filter (name or id) of the eodbulklastday
+func (r ApiListEodBulkLastDayRequest) Filter(filter string) ApiListEodBulkLastDayRequest {
+	r.filter = &filter
+	return r
+}
+
+func (r ApiListEodBulkLastDayRequest) Execute() ([]EodBulkLastDayItem, *http.Response, error) {
+	return r.ApiService.ListEodBulkLastDayExecute(r)
+}
+
+/*
+ListEodBulkLastDay Method for ListEodBulkLastDay
+
+List properties of eodbulklastday
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param exchange string exchange (name or id) of the eodbulklastday
+ @return ApiListEodBulkLastDayRequest
+*/
+func (a *QuotesApiService) ListEodBulkLastDay(ctx context.Context, exchange string) ApiListEodBulkLastDayRequest {
+	return ApiListEodBulkLastDayRequest{
+		ApiService: a,
+		ctx:        ctx,
+		exchange:   exchange,
+	}
+}
+
+// Execute executes the request
+//  @return []EodBulkLastDayItem
+func (a *QuotesApiService) ListEodBulkLastDayExecute(r ApiListEodBulkLastDayRequest) ([]EodBulkLastDayItem, *http.Response, error) {
+	var (
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []EodBulkLastDayItem
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesApiService.ListEodBulkLastDay")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/eod-bulk-last-day/{exchange}"
+	localVarPath = strings.Replace(localVarPath, "{"+"exchange"+"}", url.PathEscape(parameterToString(r.exchange, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.fmt == nil {
+		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
+	}
+
+	localVarQueryParams.Add("fmt", parameterToString(*r.fmt, ""))
+	if r.symbols != nil {
+		localVarQueryParams.Add("symbols", parameterToString(*r.symbols, ""))
+	}
+	if r.type_ != nil {
+		localVarQueryParams.Add("type", parameterToString(*r.type_, ""))
+	}
+	if r.date != nil {
+		localVarQueryParams.Add("date", parameterToString(*r.date, ""))
+	}
+	if r.filter != nil {
+		localVarQueryParams.Add("filter", parameterToString(*r.filter, ""))
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["ApiKeyAuth"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarQueryParams.Add("api_token", key)
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiListHistoryIntradayQuotesRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *QuotesApiService
 	ticker     string
 	fmt        *string
@@ -61,7 +229,7 @@ func (r ApiListHistoryIntradayQuotesRequest) To(to string) ApiListHistoryIntrada
 	return r
 }
 
-func (r ApiListHistoryIntradayQuotesRequest) Execute() ([]Quote, *_nethttp.Response, error) {
+func (r ApiListHistoryIntradayQuotesRequest) Execute() ([]Quote, *http.Response, error) {
 	return r.ApiService.ListHistoryIntradayQuotesExecute(r)
 }
 
@@ -70,11 +238,11 @@ ListHistoryIntradayQuotes Method for ListHistoryIntradayQuotes
 
 List properties of historyintradayquotes
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ticker string ticker (name or id) of the historyintradayquotes
  @return ApiListHistoryIntradayQuotesRequest
 */
-func (a *QuotesApiService) ListHistoryIntradayQuotes(ctx _context.Context, ticker string) ApiListHistoryIntradayQuotesRequest {
+func (a *QuotesApiService) ListHistoryIntradayQuotes(ctx context.Context, ticker string) ApiListHistoryIntradayQuotesRequest {
 	return ApiListHistoryIntradayQuotesRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -84,27 +252,25 @@ func (a *QuotesApiService) ListHistoryIntradayQuotes(ctx _context.Context, ticke
 
 // Execute executes the request
 //  @return []Quote
-func (a *QuotesApiService) ListHistoryIntradayQuotesExecute(r ApiListHistoryIntradayQuotesRequest) ([]Quote, *_nethttp.Response, error) {
+func (a *QuotesApiService) ListHistoryIntradayQuotesExecute(r ApiListHistoryIntradayQuotesRequest) ([]Quote, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []Quote
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Quote
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesApiService.ListHistoryIntradayQuotes")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/intraday/{ticker}"
-	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", _neturl.PathEscape(parameterToString(r.ticker, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", url.PathEscape(parameterToString(r.ticker, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -153,7 +319,7 @@ func (a *QuotesApiService) ListHistoryIntradayQuotesExecute(r ApiListHistoryIntr
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -163,15 +329,15 @@ func (a *QuotesApiService) ListHistoryIntradayQuotesExecute(r ApiListHistoryIntr
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -180,7 +346,7 @@ func (a *QuotesApiService) ListHistoryIntradayQuotesExecute(r ApiListHistoryIntr
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -191,7 +357,7 @@ func (a *QuotesApiService) ListHistoryIntradayQuotesExecute(r ApiListHistoryIntr
 }
 
 type ApiListHistoryQuotesRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *QuotesApiService
 	ticker     string
 	period     *string
@@ -238,7 +404,7 @@ func (r ApiListHistoryQuotesRequest) To(to string) ApiListHistoryQuotesRequest {
 	return r
 }
 
-func (r ApiListHistoryQuotesRequest) Execute() ([]Quote, *_nethttp.Response, error) {
+func (r ApiListHistoryQuotesRequest) Execute() ([]Quote, *http.Response, error) {
 	return r.ApiService.ListHistoryQuotesExecute(r)
 }
 
@@ -247,11 +413,11 @@ ListHistoryQuotes Method for ListHistoryQuotes
 
 List properties of historyquotes
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ticker string ticker (name or id) of the historyquotes
  @return ApiListHistoryQuotesRequest
 */
-func (a *QuotesApiService) ListHistoryQuotes(ctx _context.Context, ticker string) ApiListHistoryQuotesRequest {
+func (a *QuotesApiService) ListHistoryQuotes(ctx context.Context, ticker string) ApiListHistoryQuotesRequest {
 	return ApiListHistoryQuotesRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -261,27 +427,25 @@ func (a *QuotesApiService) ListHistoryQuotes(ctx _context.Context, ticker string
 
 // Execute executes the request
 //  @return []Quote
-func (a *QuotesApiService) ListHistoryQuotesExecute(r ApiListHistoryQuotesRequest) ([]Quote, *_nethttp.Response, error) {
+func (a *QuotesApiService) ListHistoryQuotesExecute(r ApiListHistoryQuotesRequest) ([]Quote, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []Quote
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []Quote
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesApiService.ListHistoryQuotes")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/eod/{ticker}"
-	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", _neturl.PathEscape(parameterToString(r.ticker, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", url.PathEscape(parameterToString(r.ticker, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 
 	if r.period != nil {
 		localVarQueryParams.Add("period", parameterToString(*r.period, ""))
@@ -332,7 +496,7 @@ func (a *QuotesApiService) ListHistoryQuotesExecute(r ApiListHistoryQuotesReques
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -342,15 +506,15 @@ func (a *QuotesApiService) ListHistoryQuotesExecute(r ApiListHistoryQuotesReques
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -359,7 +523,7 @@ func (a *QuotesApiService) ListHistoryQuotesExecute(r ApiListHistoryQuotesReques
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -370,7 +534,7 @@ func (a *QuotesApiService) ListHistoryQuotesExecute(r ApiListHistoryQuotesReques
 }
 
 type ApiListShortsQuotesRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *QuotesApiService
 	ticker     string
 	fmt        *string
@@ -382,7 +546,7 @@ func (r ApiListShortsQuotesRequest) Fmt(fmt string) ApiListShortsQuotesRequest {
 	return r
 }
 
-func (r ApiListShortsQuotesRequest) Execute() ([]SplitsQuote, *_nethttp.Response, error) {
+func (r ApiListShortsQuotesRequest) Execute() ([]SplitsQuote, *http.Response, error) {
 	return r.ApiService.ListShortsQuotesExecute(r)
 }
 
@@ -391,11 +555,11 @@ ListShortsQuotes Method for ListShortsQuotes
 
 List properties of shortsquotes
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ticker string ticker (name or id) of the shortsquotes
  @return ApiListShortsQuotesRequest
 */
-func (a *QuotesApiService) ListShortsQuotes(ctx _context.Context, ticker string) ApiListShortsQuotesRequest {
+func (a *QuotesApiService) ListShortsQuotes(ctx context.Context, ticker string) ApiListShortsQuotesRequest {
 	return ApiListShortsQuotesRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -405,27 +569,25 @@ func (a *QuotesApiService) ListShortsQuotes(ctx _context.Context, ticker string)
 
 // Execute executes the request
 //  @return []SplitsQuote
-func (a *QuotesApiService) ListShortsQuotesExecute(r ApiListShortsQuotesRequest) ([]SplitsQuote, *_nethttp.Response, error) {
+func (a *QuotesApiService) ListShortsQuotesExecute(r ApiListShortsQuotesRequest) ([]SplitsQuote, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []SplitsQuote
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []SplitsQuote
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesApiService.ListShortsQuotes")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/shorts/{ticker}"
-	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", _neturl.PathEscape(parameterToString(r.ticker, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", url.PathEscape(parameterToString(r.ticker, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -462,7 +624,7 @@ func (a *QuotesApiService) ListShortsQuotesExecute(r ApiListShortsQuotesRequest)
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -472,15 +634,15 @@ func (a *QuotesApiService) ListShortsQuotesExecute(r ApiListShortsQuotesRequest)
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -489,7 +651,7 @@ func (a *QuotesApiService) ListShortsQuotesExecute(r ApiListShortsQuotesRequest)
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -500,7 +662,7 @@ func (a *QuotesApiService) ListShortsQuotesExecute(r ApiListShortsQuotesRequest)
 }
 
 type ApiListSplitsQuotesRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *QuotesApiService
 	ticker     string
 	fmt        *string
@@ -526,7 +688,7 @@ func (r ApiListSplitsQuotesRequest) To(to string) ApiListSplitsQuotesRequest {
 	return r
 }
 
-func (r ApiListSplitsQuotesRequest) Execute() ([]SplitsQuote, *_nethttp.Response, error) {
+func (r ApiListSplitsQuotesRequest) Execute() ([]SplitsQuote, *http.Response, error) {
 	return r.ApiService.ListSplitsQuotesExecute(r)
 }
 
@@ -535,11 +697,11 @@ ListSplitsQuotes Method for ListSplitsQuotes
 
 List properties of splitsquotes
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ticker string ticker (name or id) of the splitsquotes
  @return ApiListSplitsQuotesRequest
 */
-func (a *QuotesApiService) ListSplitsQuotes(ctx _context.Context, ticker string) ApiListSplitsQuotesRequest {
+func (a *QuotesApiService) ListSplitsQuotes(ctx context.Context, ticker string) ApiListSplitsQuotesRequest {
 	return ApiListSplitsQuotesRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -549,27 +711,25 @@ func (a *QuotesApiService) ListSplitsQuotes(ctx _context.Context, ticker string)
 
 // Execute executes the request
 //  @return []SplitsQuote
-func (a *QuotesApiService) ListSplitsQuotesExecute(r ApiListSplitsQuotesRequest) ([]SplitsQuote, *_nethttp.Response, error) {
+func (a *QuotesApiService) ListSplitsQuotesExecute(r ApiListSplitsQuotesRequest) ([]SplitsQuote, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  []SplitsQuote
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue []SplitsQuote
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesApiService.ListSplitsQuotes")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/splits/{ticker}"
-	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", _neturl.PathEscape(parameterToString(r.ticker, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", url.PathEscape(parameterToString(r.ticker, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -614,7 +774,7 @@ func (a *QuotesApiService) ListSplitsQuotesExecute(r ApiListSplitsQuotesRequest)
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -624,15 +784,15 @@ func (a *QuotesApiService) ListSplitsQuotesExecute(r ApiListSplitsQuotesRequest)
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -641,7 +801,7 @@ func (a *QuotesApiService) ListSplitsQuotesExecute(r ApiListSplitsQuotesRequest)
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}
@@ -652,7 +812,7 @@ func (a *QuotesApiService) ListSplitsQuotesExecute(r ApiListSplitsQuotesRequest)
 }
 
 type ApiReadRealtimeQuotesRequest struct {
-	ctx        _context.Context
+	ctx        context.Context
 	ApiService *QuotesApiService
 	ticker     string
 	fmt        *string
@@ -678,7 +838,7 @@ func (r ApiReadRealtimeQuotesRequest) Filter(filter string) ApiReadRealtimeQuote
 	return r
 }
 
-func (r ApiReadRealtimeQuotesRequest) Execute() (Quote, *_nethttp.Response, error) {
+func (r ApiReadRealtimeQuotesRequest) Execute() (*Quote, *http.Response, error) {
 	return r.ApiService.ReadRealtimeQuotesExecute(r)
 }
 
@@ -687,11 +847,11 @@ ReadRealtimeQuotes Method for ReadRealtimeQuotes
 
 Read properties of realtimequotes
 
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param ticker string ticker (name or id) of the realtimequotes
  @return ApiReadRealtimeQuotesRequest
 */
-func (a *QuotesApiService) ReadRealtimeQuotes(ctx _context.Context, ticker string) ApiReadRealtimeQuotesRequest {
+func (a *QuotesApiService) ReadRealtimeQuotes(ctx context.Context, ticker string) ApiReadRealtimeQuotesRequest {
 	return ApiReadRealtimeQuotesRequest{
 		ApiService: a,
 		ctx:        ctx,
@@ -701,27 +861,25 @@ func (a *QuotesApiService) ReadRealtimeQuotes(ctx _context.Context, ticker strin
 
 // Execute executes the request
 //  @return Quote
-func (a *QuotesApiService) ReadRealtimeQuotesExecute(r ApiReadRealtimeQuotesRequest) (Quote, *_nethttp.Response, error) {
+func (a *QuotesApiService) ReadRealtimeQuotesExecute(r ApiReadRealtimeQuotesRequest) (*Quote, *http.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  Quote
+		localVarHTTPMethod  = http.MethodGet
+		localVarPostBody    interface{}
+		formFiles           []formFile
+		localVarReturnValue *Quote
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "QuotesApiService.ReadRealtimeQuotes")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/real-time/{ticker}"
-	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", _neturl.PathEscape(parameterToString(r.ticker, "")), -1)
+	localVarPath = strings.Replace(localVarPath, "{"+"ticker"+"}", url.PathEscape(parameterToString(r.ticker, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
 	if r.fmt == nil {
 		return localVarReturnValue, nil, reportError("fmt is required and must be specified")
 	}
@@ -764,7 +922,7 @@ func (a *QuotesApiService) ReadRealtimeQuotesExecute(r ApiReadRealtimeQuotesRequ
 			}
 		}
 	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
 	}
@@ -774,15 +932,15 @@ func (a *QuotesApiService) ReadRealtimeQuotesExecute(r ApiReadRealtimeQuotesRequ
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarBody, err := ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	localVarHTTPResponse.Body = ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
 		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
@@ -791,7 +949,7 @@ func (a *QuotesApiService) ReadRealtimeQuotesExecute(r ApiReadRealtimeQuotesRequ
 
 	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		newErr := GenericOpenAPIError{
+		newErr := &GenericOpenAPIError{
 			body:  localVarBody,
 			error: err.Error(),
 		}

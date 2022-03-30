@@ -36,8 +36,8 @@ func main() {
     offset := "[200]" // string | string offset (name or id) of the news (optional)
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.NewsApi.ListNews(context.Background()).S(s).From(from).To(to).Limit(limit).Offset(offset).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.NewsApi.ListNews(context.Background()).S(s).From(from).To(to).Limit(limit).Offset(offset).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `NewsApi.ListNews``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

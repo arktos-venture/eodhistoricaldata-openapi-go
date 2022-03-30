@@ -37,8 +37,8 @@ func main() {
     limit := "limit_example" // string | string limit (name or id) of the bulk-fundamentals (optional)
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.CompaniesApi.ListBulkFundamentals(context.Background(), exchange).Fmt(fmt).Symbols(symbols).Offset(offset).Limit(limit).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.CompaniesApi.ListBulkFundamentals(context.Background(), exchange).Fmt(fmt).Symbols(symbols).Offset(offset).Limit(limit).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `CompaniesApi.ListBulkFundamentals``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -112,8 +112,8 @@ func main() {
     filter := "filter_example" // string | string filter (name or id) of the fundamentals (optional)
 
     configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.CompaniesApi.ReadFundamentals(context.Background(), ticker).Filter(filter).Execute()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.CompaniesApi.ReadFundamentals(context.Background(), ticker).Filter(filter).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `CompaniesApi.ReadFundamentals``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)

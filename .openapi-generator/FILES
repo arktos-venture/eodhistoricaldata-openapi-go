@@ -20,6 +20,7 @@ docs/CashFlow.md
 docs/CompaniesApi.md
 docs/Dividend.md
 docs/DividendsApi.md
+docs/EodBulkLastDayItem.md
 docs/Exchange.md
 docs/ExchangeDetails.md
 docs/ExchangeDetailsExchangeHolidays.md
@@ -73,6 +74,7 @@ model_bond_fundamentals_issue_data.go
 model_bond_fundamentals_rating.go
 model_cash_flow.go
 model_dividend.go
+model_eod_bulk_last_day_item.go
 model_exchange.go
 model_exchange_details.go
 model_exchange_details_exchange_holidays.go
